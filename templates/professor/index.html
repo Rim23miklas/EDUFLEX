@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDUFLEX | Professor Dashboard | Générer Un Script Pour Un Document Pdf</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main/assets/css/styles.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+    <style>
+      .btn .spinner-border {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <!-- Sidebar -->
+      {% include "professor/sidebar.html" %}
+      <div class="body-wrapper">
+        <!-- Header -->
+        {% include "professor/header.html" %}
+        <div class="container-fluid">
+          <h3>Bonjour, {{user['nom']}} {{user['prenom']}}</h3>
+          <h5>
+            <span class="badge bg-primary">Espace Professeur</span> - Générer Un
+            Script Pour Un Document Pdf
+          </h5>
+          <br />
+          <div class="row">
+            <!-- Formulaire d'envoi de fichier -->
+            <div class="col">
+              <form id="pdfForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="pdf_file" class="form-label"
+                    >Télécharger fichier PDF</label
+                  >
+                  <input
+                    type="file"
+                    id="pdf_file"
+                    name="pdf_file"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  id="pdfSubmitButton"
+                >
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    style="display: none"
+                  ></span>
+                  Télécharger PDF et Générer Scripts
+                </button>
+              </form>
+              <br /><br />
+              <!-- Zone de texte pour la sortie du script -->
+              <textarea
+                id="scriptOutput"
+                class="form-control mb-4"
+                rows="8"
+                placeholder="Le résultat du script apparaîtra ici"
+                readonly
+              ></textarea>
+              <!-- Champ pour les commandes de script et bouton de soumission -->
+              <div class="input-group mb-4">
+                <input
+                  type="text"
+                  id="scriptCommands"
+                  class="form-control"
+                  placeholder="Entrer les commandes pour la modification du script"
+                />
+                <button id="updateScript" class="btn btn-secondary">
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    style="display: none"
+                  ></span>
+                  Soumettre Commande
+                </button>
+              </div>
+              <br />
+              <button class="btn btn-sm btn-primary" onclick="downloadPDF()">
+                <i class="ti ti-download"></i>
+                Télécharger
+              </button>
+            </div>
+          </div>
+          
+          <!-- New Section for Generating Explanatory Video -->
+          <div class="row mt-5">
+            <div class="col">
+              <h5>Générer Une Vidéo Explicative</h5>
+              <p>
+                Cette fonctionnalité permet la génération automatique d'une vidéo explicative en se basant sur l'AI.
+                Note: cette section ne fonctionne pas pour le moment, elle est juste pour la partie frontend.
+              </p>
+              <button class="btn btn-primary" id="generateVideoButton">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  style="display: none"
+                ></span>
+                Générer Vidéo
+              </button>
+              <div class="mt-4" id="videoOutput">
+                <!-- The generated video will be displayed here -->
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/sidebarmenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/app.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/dashboard.js') }}"></script>
+    <script>
+      function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const content = document.getElementById("scriptOutput").value;
+
+        doc.text(content, 10, 10);
+
+        doc.save("Script.pdf");
+      }
+
+      $(document).ready(function () {
+        // Handle form submission
+        $("#pdfForm").submit(function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          var formData = new FormData();
+          formData.append("pdf_file", $("#pdf_file")[0].files[0]);
+
+          // Show loader
+          $("#pdfSubmitButton .spinner-border").show();
+
+          $.ajax({
+            type: "POST",
+            url: "{{ url_for('upload_pdf') }}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              // Hide loader
+              $("#pdfSubmitButton .spinner-border").hide();
+
+              if (response.error) {
+                $("#scriptOutput").val(response.error);
+              } else {
+                // Display generated script
+                $("#scriptOutput").val(response.script);
+                // Store original script for modification
+                $("#scriptOutput").data("originalScript", response.script);
+              }
+            },
+            error: function (xhr, status, error) {
+              // Hide loader
+              $("#pdfSubmitButton .spinner-border").hide();
+
+              console.error("Error:", error);
+              $("#scriptOutput").val("Failed to generate script.");
+            },
+          });
+        });
+
+        // Handle script update submission
+        $("#updateScript").click(function () {
+          var scriptCommands = $("#scriptCommands").val();
+          var originalScript = $("#scriptOutput").data("originalScript");
+
+          // Show loader
+          $("#updateScript .spinner-border").show();
+
+          $.ajax({
+            type: "POST",
+            url: "{{ url_for('modify_script') }}",
+            data: {
+              scriptCommands: scriptCommands,
+              originalScript: originalScript,
+            },
+            success: function (response) {
+              // Hide loader
+              $("#updateScript .spinner-border").hide();
+
+              $("#scriptOutput").val(response.updatedScript);
+            },
+            error: function (xhr, status, error) {
+              // Hide loader
+              $("#updateScript .spinner-border").hide();
+
+              console.error("Error:", error);
+              $("#scriptOutput").val("Failed to update script.");
+            },
+          });
+        });
+
+        // Handle generate video button click
+        $("#generateVideoButton").click(function () {
+          // Show loader
+          $("#generateVideoButton .spinner-border").show();
+
+          // Simulate video generation process
+          setTimeout(function () {
+            // Hide loader
+            $("#generateVideoButton .spinner-border").hide();
+
+            // Display the generated video
+            $("#videoOutput").html('<video style="border-radius:10px" width="460" height="240" controls><source src="path_to_generated_video.mp4" type="video/mp4">Your browser does not support the video tag.</video>');
+          }, 1000); 
+        });
+      });
+    </script>
+  </body>
+</html>

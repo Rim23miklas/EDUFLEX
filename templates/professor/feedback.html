@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDUFLEX | Professor Dashboard | Feedbacks And Students Conversations</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main/assets/css/styles.min.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+
+    <style>
+      .btn .spinner-border {
+        margin-right: 5px;
+      }
+
+      .card {
+        border-radius: 15px;
+        overflow: hidden;
+        border: none;
+      }
+
+      .table th,
+      .table td {
+        vertical-align: middle;
+        border-top: none;
+      }
+
+      .table thead th {
+        border-bottom: 2px solid #e9ecef;
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .clickable-row:hover {
+        background-color: #f8f9fa;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        text-transform: uppercase;
+      }
+
+      .avatar-text {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        line-height: 40px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--  Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <!-- Sidebar -->
+      {% include "professor/sidebar.html" %}
+
+      <div class="body-wrapper">
+        <!--  Header -->
+        {% include "professor/header.html" %}
+
+        <div class="container-fluid">
+          <div class="row">
+            <h5 class="card-title fw-semibold mb-4">
+              <span class="badge bg-primary">Espace Professeur</span> -
+              Feedbacks Et Conversations
+            </h5>
+            <div class="col-lg-4 d-flex align-items-stretch">
+              <div class="card w-100">
+                <div class="card-body p-4">
+                  <div class="mb-4">
+                    <h5 class="card-title fw-semibold">FeedBack Général</h5>
+                  </div>
+                  <form id="feedbackForm">
+                    <div class="mb-3">
+                      <label for="notes" class="form-label">Feedback</label>
+                      <textarea
+                        class="form-control"
+                        id="notes"
+                        rows="15"
+                        style="resize: none"
+                      ></textarea>
+                      <div id="emailHelp" class="form-text">
+                        Le feedback peut être soumis à des erreurs.
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      id="generateFeedbackBtn"
+                    >
+                      Générer
+                      <span
+                        class="spinner-border spinner-border-sm d-none"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary ms-2"
+                      id="copyFeedbackBtn"
+                    >
+                      Copier
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 d-flex align-items-stretch">
+              <div class="card w-100 shadow-sm">
+                <div class="card-body p-4">
+                  <h5 class="card-title fw-bold mb-4">
+                    Conversations Récentes
+                    <span class="badge bg-primary">{{number}}</span>
+                  </h5>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-hover text-nowrap mb-0 align-middle"
+                    >
+                      <thead class="text-primary fs-5">
+                        <tr>
+                          <th class="border-bottom-0">Emétteur</th>
+                          <th class="border-bottom-0">Date</th>
+                          <th class="border-bottom-0">Messages</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for convo in conversations %}
+                        <tr class="clickable-row" data-id="{{ convo.id }}">
+                          <td class="border-bottom-0">
+                            <div class="d-flex align-items-center">
+                              <div class="avatar me-3">
+                                <span class="avatar-text rounded-circle"
+                                  >{{ convo.nom[0] }}{{ convo.prenom[0] }}</span
+                                >
+                              </div>
+
+                              <div>
+                                <h6 class="fw-bold mb-0">
+                                  {{ convo.nom }} {{ convo.prenom }}
+                                </h6>
+                                <span class="text-muted"
+                                  >{{ convo.email }}</span
+                                >
+                              </div>
+                            </div>
+                          </td>
+                          <td class="border-bottom-0">
+                            <p class="mb-0">{{ convo.last_message_date }}</p>
+                          </td>
+
+                          <td class="border-bottom-0">
+                            <h6 class="fw-bold mb-0">
+                              {{ convo.message_count }} messages
+                            </h6>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                // Function to generate random color
+                function getRandomColor() {
+                  const colors = [
+                    "#e3a600",
+                    "#001033",
+                    "#122a5c",
+                    "#7a7a7a",
+                    "#a19e00",
+                    "#242424",
+                  ];
+                  return colors[Math.floor(Math.random() * colors.length)];
+                }
+
+                var rows = document.querySelectorAll(".clickable-row");
+                rows.forEach(function (row) {
+                  row.addEventListener("click", function () {
+                    var receiverId = this.getAttribute("data-id");
+                    window.location.href =
+                      "/professor/discussion/" + receiverId;
+                  });
+
+                  // Apply random background color to avatar text
+                  var avatar = row.querySelector(".avatar-text");
+                  if (avatar) {
+                    avatar.style.backgroundColor = getRandomColor();
+                  }
+                });
+              });
+            </script>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                const feedbackForm = document.getElementById("feedbackForm");
+                const generateFeedbackBtn = document.getElementById(
+                  "generateFeedbackBtn"
+                );
+                const copyFeedbackBtn =
+                  document.getElementById("copyFeedbackBtn");
+
+                feedbackForm.addEventListener("submit", function (event) {
+                  event.preventDefault();
+
+                  // Show loader
+                  const loader =
+                    generateFeedbackBtn.querySelector(".spinner-border");
+                  loader.classList.remove("d-none");
+
+                  // Disable button while processing
+                  generateFeedbackBtn.disabled = true;
+
+                  // Clear previous feedback if any
+                  document.getElementById("notes").value = "";
+
+                  // Make fetch request to server for feedback
+                  fetch("/professor/feedback")
+                    .then((response) => response.json())
+                    .then((data) => {
+                      // Update textarea with generated feedback
+                      document.getElementById("notes").value =
+                        data.general_feedback;
+                    })
+                    .catch((error) =>
+                      console.error("Error fetching feedback:", error)
+                    )
+                    .finally(() => {
+                      // Hide loader
+                      loader.classList.add("d-none");
+
+                      // Enable button after processing
+                      generateFeedbackBtn.disabled = false;
+                    });
+                });
+
+                // Copy feedback functionality
+                copyFeedbackBtn.addEventListener("click", function () {
+                  const feedbackTextarea = document.getElementById("notes");
+
+                  // Select the text inside the textarea
+                  feedbackTextarea.select();
+                  feedbackTextarea.setSelectionRange(
+                    0,
+                    99999
+                  ); /* For mobile devices */
+
+                  // Copy the selected text
+                  document.execCommand("copy");
+
+                  // Deselect the text
+                  window.getSelection().removeAllRanges();
+
+                  // Optionally, you can provide user feedback that the text has been copied
+                  // For example, change the button text briefly
+                  copyFeedbackBtn.textContent = "Feedback Copié!";
+                  setTimeout(function () {
+                    copyFeedbackBtn.textContent = "Copier";
+                  }, 2000); // Change back after 2 seconds
+                });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='main/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/sidebarmenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/app.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/dashboard.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+mysql-connector-python
+Flask
+python-dotenv
+openai
+pymupdf 
+python-pptx
+flask-socketio
+

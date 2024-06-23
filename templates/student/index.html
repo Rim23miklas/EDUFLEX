@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDUFLEX | Student Dashboard</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main/assets/css/styles.min.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+  </head>
+
+  <body>
+    <!--  Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <!-- Sidebar -->
+      {% include "student/sidebar.html" %}
+
+      <!--  Main wrapper -->
+      <div class="body-wrapper">
+        <!-- header -->
+        {% include "student/header.html" %}
+
+        <!--  Header End -->
+        <div class="container-fluid">
+          <h3>Bonjour, {{user['nom']}} {{user['prenom']}}</h3>
+          <h5>
+            <span class="badge bg-primary">Espace Etudiant</span> - La liste des
+            cours
+          </h5>
+          <br />
+          <!--Cours-->
+          <div class="row">
+            {% for subject in subjects %}
+            <div class="col-sm-6 col-xl-3">
+              <div class="card overflow-hidden rounded-2">
+                <div class="position-relative">
+                  <a href="{{ url_for('student_course', course_id=subject[2]) }}">
+                    <img
+                      src="{{ url_for('static', filename='main/assets/images/subjects/s' + subject[2]|string + '.png') }}"
+                      class="card-img-top rounded-0"
+                      alt="cours"
+                    />
+                  </a>
+                  <a
+                    href="{{ url_for('student_course', course_id=subject[2]) }}"
+                    class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    data-bs-title="Add To Cart"
+                    ><i class="ti ti-school fs-4"></i
+                  ></a>
+                </div>
+                <div class="card-body pt-3 p-4">
+                  <h6 class="fw-semibold fs-4">{{ subject[0] }}</h6>
+                  <h6 class="fw-semibold fs-3 mb-0">
+                    Prof
+                    <span class="ms-2 fw-normal text-muted fs-3">{{ subject[3] }}</span>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='main/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/sidebarmenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/app.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/dashboard.js') }}"></script>
+  </body>
+</html>

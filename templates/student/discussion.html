@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDUFLEX | Student Dashboard | Student Conversation</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main/assets/css/styles.min.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+
+    <style>
+      .container-fluid .message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-bottom: 5px;
+      }
+      .container-fluid .message.sender {
+        align-items: flex-end;
+      }
+      .container-fluid .message.receiver {
+        align-items: flex-start;
+      }
+      .container-fluid .message-body {
+        max-width: 60%;
+      }
+      .container-fluid .message.sender .message-body {
+        background-color: #f1f1f1;
+      }
+      .container-fluid .message.receiver .message-body {
+        background-color: #01273e;
+        color: white;
+      }
+      .container-fluid .timestamp {
+        margin-top: 5px;
+        font-size: 0.8em;
+      }
+      /* Fixed form at the bottom */
+      .container-fluid .fixed-bottom-form {
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 20px;
+        left: 0;
+        right: 0;
+        z-index: 1; /* ensure it's above other content */
+        margin-left: 300px;
+        margin-right: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      {% include "student/sidebar.html" %}
+      <div class="body-wrapper">
+        {% include "student/header.html" %}
+        <div class="container-fluid">
+          <div
+            class="px-4 py-5 chat-box bg-white"
+            style="padding-bottom: 100px"
+          >
+            {% for message in messages %} {% if user_id == message[0] %}
+            <div class="message sender">
+              <div class="message-body rounded py-2 px-3 mb-2">
+                <p class="text-small mb-0">{{ message[2] }}</p>
+              </div>
+              <p class="small text-muted timestamp">
+                {{ message[3].strftime('%H:%M') }}
+              </p>
+            </div>
+            {% else %}
+            <div class="message receiver">
+              <div class="message-body rounded py-2 px-3 mb-2">
+                <p class="text-small mb-0">{{ message[2] }}</p>
+              </div>
+              <p class="small text-muted timestamp">
+                {{ message[3].strftime('%H:%M') }}
+              </p>
+            </div>
+            {% endif %} {% endfor %}
+          </div>
+          <!-- Fixed form at the bottom -->
+          <form
+            class="fixed-bottom-form"
+            action="{{ url_for('app_send', receiver_id=receiver_id) }}"
+            method="post"
+          >
+            <div style="border-radius: 10px" class="input-group">
+              <input
+                name="message"
+                type="text"
+                placeholder="Tapez votre message"
+                aria-describedby="button-addon2"
+                class="form-control rounded-2 border-0 py-4"
+                style="background-color: rgb(228, 228, 228)"
+              />
+              <button
+                class="btn btn-primary rounded-2 py-2 px-4 ml-2"
+                type="submit"
+                id="button-addon2"
+                style="margin-left: 10px"
+              >
+                <i class="ti ti-send"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='main/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/sidebarmenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/app.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/dashboard.js') }}"></script>
+
+    <script>
+      // Scroll the chat box to the bottom
+      var chatBox = document.querySelector(".chat-box");
+      function scrollToBottom() {
+        $(window).scrollTop(chatBox.scrollHeight);
+      }
+      // Execute the scrollToBottom function on page load
+      $(window).on("load", function () {
+        scrollToBottom();
+      });
+    </script>
+  </body>
+</html>

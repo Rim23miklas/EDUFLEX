@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+
+    <title>EDUFLEX | Flex Education For A Flex Future</title>
+
+    <!-- Bootstrap core CSS -->
+    <link
+      href="{{ url_for('static', filename='index/vendor/bootstrap/css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+
+    <!-- Additional CSS Files -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index/assets/css/fontawesome.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index/assets/css/templatemo-digimedia-v1.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index/assets/css/animated.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index/assets/css/owl.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+
+    <style>
+      .social-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      a {
+        color: rgb(73, 73, 73);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header
+      class="header-area header-sticky wow slideInDown"
+      data-wow-duration="0.75s"
+      data-wow-delay="0s"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-12" >
+            <nav class="main-nav" style="height: 90px !important;">
+              <!-- ***** Logo Start ***** -->
+              <a href="/" class="logo">
+                <img
+                  src="{{ url_for('static', filename='main/assets/images/logos/logo.png') }}"
+                  alt="logo"
+                  height="80px"
+                />
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                <li class="scroll-to-section">
+                  <a href="/" class="active">Principale</a>
+                </li>
+                <li class="scroll-to-section"><a href="#about">A Propos</a></li>
+                <li class="scroll-to-section">
+                  <div class="border-first-button">
+                    <a href="/login">Se Connecter</a>
+                  </div>
+                </li>
+              </ul>
+              <a class="menu-trigger">
+                <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div
+      class="main-banner wow fadeIn"
+      id="top"
+      data-wow-duration="1s"
+      data-wow-delay="0.5s"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6 align-self-center">
+                <div
+                  class="left-content show-up header-text wow fadeInLeft"
+                  data-wow-duration="1s"
+                  data-wow-delay="1s"
+                >
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <h6>EDUFLEX</h6>
+                      <h2>Flex Education For A Flex Future</h2>
+                      <p>
+                        Éducation flexible pour un avenir flexible. Nous
+                        adaptons l'apprentissage à vos besoins pour que vous
+                        puissiez façonner votre succès.
+                      </p>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="border-first-button scroll-to-section">
+                        <a href="/login">Se Connecter</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div
+                  class="right-image wow fadeInRight"
+                  data-wow-duration="1s"
+                  data-wow-delay="0.5s"
+                >
+                  <img
+                    src="{{ url_for('static', filename='index/assets/images/main-2.webp') }}"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="about" class="about section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6">
+                <div
+                  class="about-left-image wow fadeInLeft"
+                  data-wow-duration="1s"
+                  data-wow-delay="0.5s"
+                >
+                  <img
+                    src="{{ url_for('static', filename='index/assets/images/main-1.webp') }}"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div
+                class="col-lg-6 align-self-center wow fadeInRight"
+                data-wow-duration="1s"
+                data-wow-delay="0.5s"
+              >
+                <div class="about-right-content">
+                  <div class="section-heading">
+                    <h6>Pourquoi EDUFLEX</h6>
+                    <h4>Quel est l'objectif de <em>EDUFLEX</em> ?</h4>
+                    <div class="line-dec"></div>
+                  </div>
+                  <p>
+                    Notre objectif est de rendre la connexion entre les
+                    étudiants et leurs professeurs fluide, favorisant ainsi des
+                    études flexibles riches en échanges et perspectives
+                    prometteuses.
+                  </p>
+                  <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                      <div
+                        class="skill-item first-skill-item wow fadeIn"
+                        data-wow-duration="1s"
+                        data-wow-delay="0s"
+                      >
+                        <div class="progress" data-percentage="90">
+                          <span class="progress-left">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <span class="progress-right">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <div class="progress-value">
+                            <div>
+                              90%<br />
+                              <span>Flexibilité</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                      <div
+                        class="skill-item second-skill-item wow fadeIn"
+                        data-wow-duration="1s"
+                        data-wow-delay="0s"
+                      >
+                        <div class="progress" data-percentage="80">
+                          <span class="progress-left">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <span class="progress-right">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <div class="progress-value">
+                            <div>
+                              80%<br />
+                              <span>Innovation</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                      <div
+                        class="skill-item third-skill-item wow fadeIn"
+                        data-wow-duration="1s"
+                        data-wow-delay="0s"
+                      >
+                        <div class="progress" data-percentage="80">
+                          <span class="progress-left">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <span class="progress-right">
+                            <span class="progress-bar"></span>
+                          </span>
+                          <div class="progress-value">
+                            <div>
+                              80%<br />
+                              <span>Interaction</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-light py-5" style="margin-top: 40px">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 mb-4">
+            <img
+              src="{{ url_for('static', filename='main/assets/images/logos/logo.png') }}"
+              alt="EDUFLEX Logo"
+              class="img-fluid mb-3"
+              style="height: 120px; width: auto"
+            />
+            <p style="color: rgb(53, 53, 53); margin-top: 0px;">
+              #flex_education_for_a_flex_future
+            </p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h5>Suivre</h5>
+            <ul class="list-unstyled">
+              <li style="margin-top: 10px">
+                <a href="https://www.linkedin.com" target="_blank">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Linkedin_icon.svg"
+                    alt="LinkedIn"
+                    class="social-icon"
+                  />
+                  LinkedIn
+                </a>
+              </li>
+
+              <li style="margin-top: 10px">
+                <a href="https://www.facebook.com" target="_blank">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                    alt="Facebook"
+                    class="social-icon"
+                  />
+                  Facebook
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h5>Liens</h5>
+            <ul class="list-unstyled">
+              <li style="margin-top: 10px"><a href="/">Home</a></li>
+              <li style="margin-top: 10px"><a href="/">A Propos</a></li>
+              <li style="margin-top: 10px">
+                <a href="/login">Se Connecter</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <p class="text-center text-muted small mb-0">
+          Copyright © 2024 EDUFLEX. All Rights Reserved. <br />
+          École Centrale Casablanca <br>
+          <img
+              src="{{ url_for('static', filename='index/assets/images/logo-ecc.png') }}"
+              alt="EDUFLEX Logo"
+              class="img-fluid mb-3"
+              style="height: 80px; width: auto"
+            />
+        </p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='index/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='index/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='index/assets/js/owl-carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='index/assets/js/animation.js') }}"></script>
+    <script src="{{ url_for('static', filename='index/assets/js/imagesloaded.js') }}"></script>
+    <script src="{{ url_for('static', filename='index/assets/js/custom.js') }}"></script>
+  </body>
+</html>

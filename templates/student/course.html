@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDUFLEX | Student Dashboard | Student Course</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='main/assets/images/logos/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main/assets/css/styles.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/global.css') }}"
+    />
+    <style>
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .col-lg-8 {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .col-lg-4 {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-body {
+        flex-grow: 1;
+      }
+
+      #myVideo {
+        height: 100%;
+      }
+      #Note {
+        height: 100%;
+      }
+
+      .quiz {
+        display: none;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -10%);
+        z-index: 1000;
+        width: 80%;
+        max-width: 500px;
+        text-align: center;
+      }
+
+      .quiz.show {
+        display: block;
+      }
+
+      .quiz h4 {
+        margin-bottom: 15px;
+      }
+
+      .quiz-question {
+        margin-bottom: 15px;
+      }
+
+      .quiz-options {
+        list-style-type: none;
+        padding: 0;
+        text-align: left;
+      }
+
+      .quiz-options li {
+        margin-bottom: 10px;
+      }
+
+      .quiz button {
+        margin-top: 15px;
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background-color: #01273e;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .quiz button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        <!-- Sidebar -->
+        {% include "student/sidebar.html" %}
+
+        <!-- Main wrapper -->
+        <div class="body-wrapper">
+            <!-- Header -->
+            {% include "student/header.html" %}
+            <div class="container-fluid">
+                <!-- Row 1 -->
+                <div class="row">
+                    <div class="col-lg-8 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <div class="card-body p-0" style="position: relative;">
+                                <video id="myVideo" class="w-100" style="width: 100vw; border-radius: 10px" controls>
+                                    <source src="{{ url_for('static', filename='videos/video.mp4') }}" type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                                <!-- Quiz Modal -->
+                                <div id="quizModal" class="quiz">
+                                    <h4>Quiz Time!</h4>
+                                    <div class="quiz-question" id="quizQuestion"></div>
+                                    <ul class="quiz-options" id="quizOptions"></ul>
+                                    <button onclick="submitQuiz()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body p-3">
+                                <form method="POST" id="Note">
+                                    <div class="mb-3">
+                                        <label for="notes" class="form-label">Notes</label>
+                                        <textarea class="form-control" id="notes" name="notes" rows="11" style="resize: none"></textarea>
+                                        <div id="emailHelp" class="form-text">Vos notes ne sont jamais partagées.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Sauvegarder Mes Notes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Professor Card -->
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mt-4">
+                            <div class="card-body p-3">
+                                <h5 class="card-title">Vous avez des questions ?</h5>
+                                <p class="card-text">
+                                    Contacter le professeur pour toute assistance.
+                                </p>
+                                <a
+                                    href="/student/discussion/{{ course[1] }}"
+                                    class="btn btn-primary"
+                                    >Contacter Professeur</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card mt-4">
+                          <div class="card-body p-3">
+                              <h5 class="card-title">Besoin de tester vos connaissances ?</h5>
+                              <p class="card-text">
+                                  Générer un quiz pour évaluer vos connaissances.
+                              </p>
+                              <a
+                                  href="#"
+                                  class="btn btn-primary"
+                                  onclick="generateQuiz()"
+                                  >Générer un Quiz</a
+                              >
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                    <div class="card mt-4">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">
+                                <i class="ti ti-file-description"></i> Mes Notes
+                            </h5>
+                            <br />
+                            <ul class="list-group">
+                                {% for note in notes %}
+                                <li
+                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                >
+                                    <div>
+                                        {{ note['content'] }}
+                                        <!-- Display note content -->
+                                        <br />
+                                        <br />
+                                        <small class="text-muted"
+                                            ><span
+                                                class="badge"
+                                                style="
+                                                    background-color: rgb(236, 236, 236);
+                                                    color: black;
+                                                    font-size: 12px;
+                                                "
+                                                ><i class="ti ti-clock"></i> {{
+                                                note['timestamp'].strftime('%Y-%m-%d %H:%M') }}</span
+                                            ></small
+                                        >
+                                    </div>
+                                    <div>
+                                        <button
+                                            class="btn btn-sm btn-primary"
+                                            onclick="downloadPDF(`{{ note['content'] }}`, `{{ note['timestamp'] }}`)"
+                                        >
+                                            <i class="ti ti-download"></i>
+                                            Télécharger
+                                        </button>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+                <script>
+                    const video = document.getElementById('myVideo');
+                    const quizModal = document.getElementById('quizModal');
+                    const quizQuestion = document.getElementById('quizQuestion');
+                    const quizOptions = document.getElementById('quizOptions');
+                    let quizDisplayed = false;
+                    
+                    // Define quiz questions and options
+                    const quizzes = {
+                        28: {
+                            question: "Qu'est-ce qu'une entreprise ?",
+                            options: [
+                                "A. Une organisation qui produit des biens ou des services pour les vendre sur un marché afin de réaliser un profit.",
+                                "B. Un lieu où les individus se rencontrent uniquement pour des activités de loisirs et de détente.",
+                                "C. Un bâtiment administratif où se déroulent exclusivement des réunions gouvernementales."
+                            ],
+                            correctAnswer: "A. Une organisation qui produit des biens ou des services pour les vendre sur un marché afin de réaliser un profit."
+                        }
+                    };
+                    
+                    // Times in seconds to show the quiz
+                    const quizTimes = Object.keys(quizzes).map(time => parseInt(time));
+
+                    video.addEventListener('timeupdate', () => {
+                        const currentTime = Math.floor(video.currentTime);
+                        if (quizTimes.includes(currentTime) && !quizDisplayed) {
+                            video.pause();
+                            video.style.display = 'none';
+
+                            // Update quiz content
+                            const quiz = quizzes[currentTime];
+                            quizQuestion.textContent = quiz.question;
+                            quizOptions.innerHTML = quiz.options.map(option => `
+                                <li><input type="radio" name="quiz" value="${option}"> ${option}</li>
+                            `).join('');
+
+                            quizModal.classList.add('show');
+                            quizDisplayed = true;
+                        }
+                    });
+
+                    function submitQuiz() {
+                        const selectedOption = document.querySelector('input[name="quiz"]:checked');
+                        if (selectedOption) {
+                            const answer = selectedOption.value;
+                            const correctAnswer = quizzes[28].correctAnswer;
+
+                            if (answer === correctAnswer) {
+                                alert("Correct! The video will now resume.");
+                                quizModal.classList.remove('show');
+                                video.style.display = 'block';
+                                video.play();
+                                video.currentTime = 28;
+                            } else {
+                                alert("Incorrect. Please try again.");
+                            }
+                        } else {
+                            alert("Please select an answer.");
+                        }
+                    }
+
+                    function downloadPDF(content, datetime) {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
+
+                        doc.text(content, 10, 10);
+                        doc.text(`Date: ${datetime}`, 10, 20);
+
+                        doc.save(`Note-${datetime}.pdf`);
+                    }
+
+                </script>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='main/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/sidebarmenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/app.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='main/assets/js/dashboard.js') }}"></script>
+  </body>
+</html>
+
+
+
+
+
